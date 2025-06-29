@@ -5,7 +5,12 @@ pipeline {
             name: 'tags',
             choices: ['@smoke', '@regression'],
             description: 'Select the type of karate test to run'
-              )               
+              )  
+        choice(
+            name: 'env',
+            choices: ['dev', 'qa','prod'],
+            description: 'Select the env for the test to run'
+              )
     }
     stages 
     {
@@ -17,6 +22,7 @@ pipeline {
         stage('Show Selected Parameters') {
             steps {
                 echo "Tag selected: ${params.tags}"
+                echo "Env selected: ${params.env}"
             }
         }
        stage('Run Tests') {
@@ -24,7 +30,7 @@ pipeline {
                 script 
                 {
                  echo "Running ${params.tags} karate tests"
-                 bat "mvn test -Dkarate.options=\"--tags ${tags}\""
+                 bat "mvn test Dkarate.env=${env} -Dkarate.options=\"--tags ${tags}\""
                 }
             }
         }
