@@ -30,7 +30,7 @@ pipeline {
                 script 
                 {
                  echo "Running ${params.tags} karate tests in ${params.env}"
-                 bat "mvn test Dkarate.env=${params.env} -Dkarate.options=\"--tags ${tags}\""
+                 bat "mvn test -Dkarate.env=${params.env} -Dkarate.options=\"--tags ${tags}\""
                 }
             }
         }
