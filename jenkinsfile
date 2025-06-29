@@ -1,0 +1,43 @@
+pipeline {
+    agent any
+   parameters {
+        choice(
+            name: 'tags',
+            choices: ['@smoke', '@regression'],
+            description: 'Select the type of karate test to run'
+              )               
+    }
+    stages 
+    {
+        stage('Build') {
+            steps {
+                echo 'Building..'
+            }
+        }
+        stage('Show Selected Parameters') {
+            steps {
+                echo "Tag selected: ${params.tags}"
+            }
+        }
+       stage('Run Tests') {
+            steps {
+                script 
+                {
+                 echo "Running ${params.tags} karate tests"
+                 bat "mvn test -Dkarate.options=\"--tags= ${tags}\""
+                }
+            }
+        }
+    }
+post {
+    always {
+        junit '**\\target\\surefire-reports\\*.xml'
+
+        publishHTML(target: [
+                    reportDir: 'target/karate-reports',
+                    reportFiles: 'karate-summary.html',
+                    reportName: 'Karate Test Report'
+                ])
+    }
+}
+}
