@@ -24,7 +24,7 @@ pipeline {
                 script 
                 {
                  echo "Running ${params.tags} karate tests"
-                 bat "mvn test -Dkarate.options=\"--tags= ${tags}\""
+                 bat "mvn test -Dkarate.options=\"--tags ${tags}\""
                 }
             }
         }
